@@ -1,0 +1,5 @@
+﻿  Hangman.cpp
+C:\Users\szymo\Desktop\szkola\Informatyka\666\Hangman\Hangman.cpp(62,20): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
+C:\Users\szymo\Desktop\szkola\Informatyka\666\Hangman\Hangman.cpp(210,20): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
+C:\Users\szymo\Desktop\szkola\Informatyka\666\Hangman\Hangman.cpp(403,12): warning C4244: "argument": konwersja z "time_t" do "unsigned int", możliwa utrata danych
+  Hangman.vcxproj -> C:\Users\szymo\Desktop\szkola\Informatyka\666\Hangman\Debug\Hangman.exe
