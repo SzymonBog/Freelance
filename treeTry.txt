@@ -1,4 +1,19 @@
 # https://stackoverflow.com/questions/9727673/list-directory-tree-structure-in-python
+
+#├── package
+#│   ├── __init__.py
+#│   ├── __main__.py
+#│   ├── subpackage
+#│   │   ├── __init__.py
+#│   │   ├── __main__.py
+#│   │   └── module.py
+#│   └── subpackage2
+#│       ├── __init__.py
+#│       ├── __main__.py
+#│       └── module2.py
+#└── package2
+#    └── __init__.py
+
 def tree(currentIp, currentPath):
     # prefix components
     space =  '    '
