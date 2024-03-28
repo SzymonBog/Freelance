@@ -5,3 +5,6 @@ def tree(currentIp, currentPath):
   # pointers
   tee =    '├── '
   last =   '└── '
+
+  # directories: ip, path, name
+  # files: ip, name, path, extention, content
