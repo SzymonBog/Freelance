@@ -1,10 +1,22 @@
+# https://stackoverflow.com/questions/9727673/list-directory-tree-structure-in-python
 def tree(currentIp, currentPath):
-  # prefix components
-  space =  '    '
-  branch = '|   '
-  # pointers
-  tee =    '├── '
-  last =   '└── '
+    # prefix components
+    space =  '    '
+    branch = '|   '
+    # pointers
+    tee =    '├── '
+    last =   '└── '
 
-  # directories: ip, path, name
-  # files: ip, name, path, extention, content
+    # directories: ip, path, name
+    # files: ip, name, path, extention, content
+
+    cursor.execute("select * from files where ip=?", (currentIp, ))
+    files = cursor.fetchall()
+
+    cursor.execute("select * from directories where ip=?", (currentIp, ))
+    dir = cursor.fetchall()
+
+    txt = str(currentPath)
+    for d in dir:
+        
+    
