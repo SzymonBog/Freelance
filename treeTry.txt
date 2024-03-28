@@ -32,6 +32,6 @@ def tree(currentIp, currentPath):
     dir = cursor.fetchall()
 
     txt = str(currentPath)
-    for d in dir:
+    for d in dir:  # check if in current directory are any folders/files, if yes add them to the tree; if folders are not empty to the same thing
         
     
