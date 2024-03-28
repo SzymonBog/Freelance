@@ -1,0 +1,7 @@
+def tree(currentIp, currentPath):
+  # prefix components
+  space =  '    '
+  branch = '|   '
+  # pointers
+  tee =    '├── '
+  last =   '└── '
