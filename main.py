@@ -71,7 +71,7 @@ login - @1496_70.183.159.171_Became_Admin  \/
 upload - @1564_FileUploaded:_by_70.183.159.171_-_file:filename.ext  \/
 append - @1552_FileAppended:_by_70.183.159.171_-_file:filename.ext
 nano - @1566_FileCreated:_by_70.183.159.171_-_file:filename.ext  \/
-       @1568_FileModified:_by_70.183.159.171_-_file:filename.ext
+       @1568_FileModified:_by_70.183.159.171_-_file:filename.ext \/
 """
 
 # 21/29 (32-all; 29-accepted; 3-rejected) +1
@@ -1377,8 +1377,53 @@ def print_tree(tree, current_path, prefix='', tree_array=None):
     return reversedTree, len(tree_array)+1
 
 
-def nano(currentIp, currentPath, filename, content, oldPath) -> (str, int):  # @1566_FileCreated:_by_70.183.159.171_-_file:filename.ext
-    filenameParts = filename.split(".")
+def nano2(currentIp, currentPath, filename, content, oldPath, exists):  # it works
+    print(filename)
+    filenameParts = str(filename).split(".")
+    if len(filenameParts) == 2:
+        name, ext = filenameParts
+    elif len(filenameParts) == 1:
+        name, ext = filenameParts[0], ""
+
+    if not exists:
+        cursor.execute("insert into files values(?, ?, ?, ?, ?)", (currentIp, oldPath, name, ext, content))
+        mydb.commit()
+        log = f'@1566_FileCreated:_by_70.183.159.171_-_file:{name}.{ext}'
+    else:
+        cursor.execute("update files set content=? where ip=? and path=? and name=? and extension=?", (content, currentIp, oldPath, name, ext))
+        mydb.commit()
+        log = f'@1568_FileModified:_by_70.183.159.171_-_file:{name}.{ext}'
+
+    cursor.execute("insert into files values (?, ?, ?, ?, ?)", (currentIp, 'log', log, '', log))
+    mydb.commit()
+
+    if not exists:
+        return f"File '{filename}' has been successfully created in {oldPath}", 2
+    else:
+        return f"File '{filename}' has been successfully modified", 2
+
+
+def nano1(currentIp, currentPath, filename, content, oldPath):  # it works
+    print(filename)
+    filenameParts = str(filename).split(".")
+    if len(filenameParts) == 2:
+        name, ext = filenameParts
+    elif len(filenameParts) == 1:
+        name, ext = filenameParts[0], ""
+    else:
+        return f"Incorrect file name\nCannot create file '{filename}'", 3
+
+    cursor.execute("select * from files where ip=? and path=? and name=? and extension=?", (currentIp, oldPath, name, ext))
+    file = cursor.fetchall()
+    if len(file) == 0:  # not working correctly
+        return oldPath, filename, False, ''
+    else:
+        return oldPath, filename, True, file[0][4]
+
+
+def nanoOld(currentIp, currentPath, filename, content, oldPath):  # @1568_FileModified:_by_70.183.159.171_-_file:filename.ext  <- delete
+    print(filename)
+    filenameParts = str(filename).split(".")
     if len(filenameParts) == 2:
         name, ext = filenameParts
     elif len(filenameParts) == 1:
@@ -1387,7 +1432,8 @@ def nano(currentIp, currentPath, filename, content, oldPath) -> (str, int):  # @
         return f"Incorrect file name\nCannot create file '{filename}'", 3
     cursor.execute("select * from files where ip=? and path=? and name=? and extension=?", (currentIp, oldPath, name, ext))
     file = cursor.fetchall()
-    if len(file) != 0:
+    if len(file) != 0:  # not working correctly
+        #return "", 2
         return f"File '{filename}' already exists in {oldPath}", 2  # for now
     else:
         if content is None:
@@ -1427,6 +1473,7 @@ currentIp = "70.183.159.171"
 currentPath = ""
 oldPath = None
 fileName = None
+exists = False
 username = ""
 password = ""
 lvl = 6  # firewall lvl
@@ -1465,7 +1512,8 @@ while running:
                     cursor.execute("insert into usedCommands (command, printout, linesCount, currentCommandPath) values (?, ?, ?, ?)", (command, output, number, prevPath))  # !!!!!
                     mydb.commit()
                 elif currentPath == "file content:":
-                    output, number = nano(currentIp, currentPath, fileName, command, oldPath)
+                    output, number = nano2(currentIp, currentPath, fileName, command, oldPath, exists)
+                    exists = False
                     currentPath = oldPath
                     cursor.execute("insert into usedCommands (command, printout, linesCount, currentCommandPath) values (?, ?, ?, ?)", (command, output, number, prevPath))  # !!!!!
                     mydb.commit()
@@ -1531,7 +1579,7 @@ while running:
                         elif command == f"upload {txt2}":
                             output, number = upload(currentIp, txt2, currentPath)
                         elif command == f"nano {txt2}":
-                            oldPath, fileName = nano(currentIp, currentPath, txt2, None, currentPath)
+                            oldPath, fileName, exists, command = nano1(currentIp, currentPath, txt2, None, currentPath)
                             currentPath = "file content:"
                         else:
                             output, number = f"No command: '{command}' - Check Syntax", 2
@@ -1570,7 +1618,8 @@ while running:
                 # not finished
                 #cursor.execute("insert into usedCommands (command, printout, linesCount, currentCommandPath) values (?, ?, ?, ?)", (command, output, number, prevPath))# !!!!!
                 #mydb.commit()
-                command = ''
+                if not exists:
+                    command = ''
 
                 cursor.execute("select command from usedCommands")
                 var = cursor.fetchall()
