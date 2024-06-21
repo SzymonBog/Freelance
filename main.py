@@ -11,7 +11,7 @@ from time import sleep  # -
 import pygame as pg
 
 # Ctrl + R  - refactor
-# add logs(in progress)
+# add logs(added)
 # MySQL - changed in code(added some variables)
 """
 servers: IP varchar, name varchar, ssh #22 boolean, ftp server #21 boolean, smtp mailserver #25 boolean, http webserver #80 boolean, required port number for crack int, connected boolean
@@ -26,7 +26,7 @@ emails: sender varchar, receiver varchar, content varchar, attachment foreign ke
 help - lists all commands \/
 scp {filename} - copy file to '/bin' \/
 scp {filename} {destination} - copy file to destination \/
-scan - scans for links on the connected machine \/
+scan - scans for links on the connected machine +-
 rm {filename (or *)} - delete specified file(all files) \/
 ps - lists currently running processes and their PIDs /
 kill {PID} - kills process number PID /
@@ -45,7 +45,7 @@ solve {firewall solution} - attempts to solve the firewall of the target machine
 login {username} {password} - requests a username and password to log in to the connected system \/
 upload {local file path/filename} - uploads the indicated file on your local machine to the current directory \/
 clear - clears the terminal / - it would make things more complicated
-append {filename} {data} - appends a line containing {data} to file {filename}(Note: appending uses a new line every time the command is used.)
+append {filename} {data} - appends a line containing {data} to file {filename}(Note: appending uses a new line every time the command is used.) \/
 shell - opens a remote access shell on target machine with Proxy overload and IP trap capabilities \/
 overload - overloads proxy server(requires at least 1 shell, the more shells you have the faster it will overload[28/n]) \/ seems ok
 sshcrack 22 - unlock port 22 using 'SSHCrack.exe'  +-
@@ -63,19 +63,19 @@ Logs:
 scp - @1579_FileDownloaded:_by_70.183.159.171_-_file:filename.ext  \/
 rm - @1546_FileRemoved:_by_70.183.159.171_-_file:filename.ext  \/
 mv - @1530_FileMoved:_by_70.183.159.171_-_file:filename.ext  \/
-connect - @1467_Connection:_from_70.183.159.171
-disconnect - @1496_70.183.159.171_Disconnected
+connect - @1467_Connection:_from_70.183.159.171  \/
+disconnect - @1496_70.183.159.171_Disconnected  \/
 cat - @1534_FileRead:_by_70.183.159.171_-_file:filename.ext  \/
 replace - @1543_FileChanged:_by_70.183.159.171_-_file:filename.ext  \/
 login - @1496_70.183.159.171_Became_Admin  \/
 upload - @1564_FileUploaded:_by_70.183.159.171_-_file:filename.ext  \/
-append - @1552_FileAppended:_by_70.183.159.171_-_file:filename.ext
+append - @1552_FileAppended:_by_70.183.159.171_-_file:filename.ext \/
 nano - @1566_FileCreated:_by_70.183.159.171_-_file:filename.ext  \/
        @1568_FileModified:_by_70.183.159.171_-_file:filename.ext \/
 """
 
-# 21/29 (32-all; 29-accepted; 3-rejected) +1
-# this code will probably have sth about 2100 lines
+# 24+2/29 (32-all; 29-accepted; 3-rejected) +1
+# this code will probably have sth about 2100 lines(but I think it will be more)
 # arrows(up, down) work :)
 
 # remember to turn on apache and mysql in xampp
@@ -114,16 +114,27 @@ def createTables(cursor: mydb.cursor(), mydb) -> None:  # not finished{almost :)
     fileExtensionsPhotonicStudios = ["dll", "dll", "sys", "sys", "", "", "", "", "", "", "", "txt"]
     fileContentsPhotonicStudios = ["1101010111110010110001100111100011010100100100000111101101111110\n0010111000000001000011011110110011100001101011000110100000011011\n1000111011110001111110101100111000001110011001110001100111000111\n0111101111001000000111111100111001111010000110100011101001110110\n1110010111101001011001001000111000011111111010010110010101000111\n1000100101101110110100100110110001011111100000010011100101001111\n1110000001000101100111111101010101000011001000010011110011101000\n0111000101111010111011001000000010010001100100000000001010101111\n1000010100010011000100011000000101010111111000110000000110101001\n0101100010001010010000101111001001011010011101111010001110001", "1010101110011101011011011001101111101001110010101011100011111110\n1101000011101110110010111111100011010000010011111011001100000110\n0110101010100011100011111000000000101000100100101101000110000000\n1011000111101000000001100111011000010001101110110011101000110101\n0110001010101000100000001001011111101110101011110110100011110101\n0010011010101110010101111010110111110100000100110010101101010000\n1110101000000000100100000111011110011000111101111100011011100000\n1110110101000110100111110100110011000000000011100100101000011110\n0010100110100110000100110011110110100111111111010110111100101010\n100010100010", "1000111010100001101111111111111000011101011010100001100111110100\n0010111101111000110001000010100010110001100010101001011001100011\n1111000011001011011111110110101011001001111111100110010001110001\n0001000111001101111010011011000000101101101010001010000010110101\n1000000010000110000110110000111111010100101010001001011111010111\n0110100111101010011001101000001111000001101100101010110100001000\n0010100000001111111111100110011100000101011111000010001111011010\n1111001010011001000101000100110111111011101010111111110100000110\n0101011000011000010101110000000010101010010101110000000010111001\n010001111010101011111010100000011000000", "7297991071011147111410110111052", "<tag> Ouroboros: lets play Pong\n<Ouroboros> Ok.\n<tag> |  .\n<Ouroboros>.  |\n<tag> | .\n<Ouroboros>  .|\n<tag> |.\n<Ouroboros>   |.\n<Ouroboros> Whoops\n\nArchived Via : http://Bash.org", "<Ben174> : If they only realised 90% of the overtime they pay me is only cause i like\nstaying here playing with Kazaa when the bandwidth picks up after hours.\n\n<ChrisLMB> : If any of my employees did that they'd be fired instantly.\n<Ben174> Where u work?\n<ChrisLMB> : I'm the CTO at LowerMyBills.com\n*** Ben174 (BenWright@TeraPro33-41.LowerMyBills.com) Quit (Leaving)\n\nArchived Via : http://Bash.org", "<Locl-Yocl> I helped the EMTs at a car wreck and got blood all over my arms and shirt. It\nlooked like I murdered 20 people with a fork... anyway, I walked into a convieniance \nstore down the street and said my girlfriend needs a tampon. The guy at the counter was\nmortified.\n\nArchived Via : http://Bash.org", "1101110101110101111110000010111001000010100011100111111010101110\n1000100011100100110111101110000100001100000011111001111111010011\n1010000100000110010010110101111001110101100000111000100110011110\n1100110101111110100011110011100011000000001000111010011101100011\n1001001001100101000101011011101010011101111000000100001110110010\n1000001011101101001000011111010111100110110011010110101001000010\n0100101100010010010000000000111010101011001110100101011001110010\n1111000010111010000110101010010111000010000", "<Zybl0re> get up\n<Zybl0re> get on up\n<Zybl0re> get up\n<Zybl0re>get on up\n<phxl|paper> and DANCE\n* nmp3bot dances :D-<\n* nmp3bot dances :D|-<\n* nmp3bot dances :D/-<\n<[SA]HatfulOfHollow> i'm going to become rich and famous after i invent a device that\nallows you to stab people in the face over the internet\n\nArchived Via : http://Bash.org", "000110000101111100110010100011001101110010111111010001010001100111100000001100110001010001110111101011011111000000011000010011100100101110010010000101111100000110111000101111001001001011110110111100110011001101010001000011111001000011010000011101010111010100110100000011010001100001100100001001000010001111010110110110100001001110101000100101100110000010110100001000011011010000101000010111", "001011110011100000001010001011101101101001110001000000101101101010111101110111011110010101000110101111001110110011100101000010011000010111010000001011000000000001110100011101011001011100110100111100101100110100110110110011111001010100010110111100000101110101100100111101100011111010010110111101100001011101000110011100001111010101000000001001101011100010100011110011000010001111010101010100000011111100010011011011000111", "config.ini\ninit_num: '12'\ncontinual_spawning 'YES'\ncolours_enabled {'peach', 'ivory', 'fudge', 'chocolate', 'magenta'}\nbehaviours_enabled {'twirl', 'thrust', 'helicopter'}\nresolution: {'1280', '800'}\nfullscreen: 'YES'\nalt_tab_enabled: 'YES'\ntexture_folder:\n'C:/Documents_and_Settings/Admin/Fax/Hot_Porn/Documents/Serious_Documents/System/\ntextures'"]
     # ---------------------------------------------
+    # Only for Viper-Battlestation
+    # directories variables <- ip from servers vars
+    directoryPathsViperBattlestation = ["", "", "", "", "home"]
+    directoryNamesViperBattlestation = ["home", "log", "bin", "sys", "work"]
+
+    # files variables <- ip from servers vars
+    filePathsViperBattlestation = ["sys", "sys", "sys", "sys", "bin", "home", "home", "home", "home", "home/work", "home/work", "home/work", "home/work"]
+    fileNamesViperBattlestation = ["x-server", "os-config", "bootcfg", "netcfg", "SSHcrack", "EmailDraft", "asdf", "Notes", "Youtubers", "seb", "ripped_prerelease", "TARGET", "jasperlog"]
+    fileExtensionsViperBattlestation = ["sys", "sys", "dll", "dll", "exe", "txt", "txt", "txt", "txt", "txt", "log", "txt", "txt"]
+    fileContentsViperBattlestation = ["729799107110101116841019710850", "001111011101000100100011010001111100101001010011001001011111111001101000100\n000100110000000110001010111011110111000111011110110001110101010101010010011\n100010010011000100001001011011010000101001000001011011100011000110011110000\n100010110111111100101000010001010111101111000111000100111000110000001011001\n101111011001100101010110110010011100010010011111111011010011001000001010", "011010001011100010010111101100100111100101001010000010110001010110001001100\n001100111001111011000101100010111110000001010011010010001100110111000111010\n101111010111001111001111000001001110101101110100001010110100101011011100101\n100111111010100100101111000001001011001110000101101010101100000011110100011\n110111010111111111111110101001101100010110101100010110000100001101100111001\n100100000001011011110010000101111010001011111", "001001001011011000111000111100110001100011010101001100101100000011011010101\n001001111010010010110111000010100001101101111111110101010010111010000010010\n110000110100101111111000100100101000101010101011000010101010010100110110001\n010011010001011000101110001110000101010101110100000110001011100111100111101\n111001001011000010101101101011010011001011111110110110011001110001100", "110111000110111010001000001111000111110001000001100110110011100010100110101\n011111010010011100011101010100111010110110111100111000101001100010010010111\n110000010000010110100001110101100000110110011010001100010111010101101010111\n110110010111110111001111110011001010111010000111010001001001111100100100110\n100110101101101010110111110111111010000000001001110111001111111101010110000\n11011110110001111111010101110", "Dad,\nSorry I haven't emailed you in a while - I've been really busy with school - year 11 is \nhard, but I think I'm doing ok.\n\nI actually wanted to ask for a little help - I need some new software for a school \nproject. It's called 'FTPBounce.exe'. It's really useful! It'll cost a lot though, and I've \nrun out of the money you sent me last time - all this IT project software is really \nexpensive.\n\nIs there any chance you could send another $2,000 to my account? It'd really help out.\n\nThanks!\nLove you,\nTim", "Induction test?\n199.59.149.230\nProxy server\n\n..\n\nNeed something about overloading it maybe?\nGot to research it more. Maybe there's a program to help? Will ask for more money..", "Finally managed to torrent that sweet new haxxor program from the server Gollum told \nme about - this is so sick!\n\nCant wait to try it out - just got to work out hot to use it first", "youtubers to check out:\n\ncaptainspinifex\nrockleesmile\nnorthernlion\nofficalcalemgames\njonathancrowgamer", "[viper] How did it go?\n[lilsebastian] It was a nightmare.\n[viper] Why?\n[lilsebastian] We spent the night at the lookout. It was super romantic.\n[lilsebastian] Then we started making out.\n[lilsebastian] Then started fooling around, you know.\n[lilsebastian] And then, er.\n[viper] What?\n[viper] Spit it out.\n[lilsebastian] It err, ended sooner than expected. Like. Clothes still on sooner.\n[viper] ......\n[viper] ......\n[viper] HAHAHAHAHAHHAHAHAHAHAHHAA\n[lilsebastian] Shut up.\n[viper] Dude, god dude, never admit that to anyone again.\n[viper] You're lucky we'er friends, otherwise I'd tell everyone that story.\n[viper] Anyway, gotta go. Got more coding to do.\n[lilsebastian] All good. See you at school tomorrow.\n[viper] Don't get there too early.", "[glaylor] YOU FUCKED IT UP\n[glaylor] 18 MONTHS DEV TIME\n[glaylor] 3 MILLION DOLLARS\n[glaylor] FOR A GAME ABOUT WATCHING MOBILE PHONE SCREENS\n[glaylor] ..........\n[hoops] Whoa, calm down man, people are going to love this\n[hoops] It's like, a statement, on the state of the word.\n[hoops] Like, have you ever walked down the street lately?\n[hoops] People always have their heads buried in their phones, they don't even notice \nit.\n\n[hoops] So we made a game that has you driving, walking, shooting, and hacking, while \nconstantly looking at their phones.\n\n[hoops] It's genius.\n[glaylor] The board is going to have my ass for this.\n[glaylor] We better give it a good name.\n[glaylor] And some hardcore box art.\n[glaylor] And add some bloom effects. That always gets the kids.", "[viper] I want a refund.\n[cs#1575] I'm sorry sir, but we cannot refund based on change of mind.\n[cs#1575] Might I suggest you that you re-list the item on J-Bay?\n[viper] I don't want to list the item on your damn auction site.\n[viper] I told you, I accidentally hit the bid button instead of the watch button\n[cs#1575] I am sorry sir, but our policy doesn't cover accidental button presses.\n[cs#1575] So you will have to accept that the Penetrator 9000 is yours, or you can try \nto recouperate the costs via out acution listings.\n\n[viper] You have messed with the wrong customer. I will make you rue this day.\n[cs#1575] Thank you sir, and may I wish you have a pleasant evening.", "[viper] you got those keys I asked for?\n[jasper] you got the cash?\n[viper] got it ready to be wired\n[jasper] I have uploaded the first half on the drop server. Once the transfer has been \ncompleted you will get the final keys.\n\n[viper] cool. checking it out now.\n[viper] awesome. they work.\n[jasper] can I have my money now?\n[viper] sent\n[jasper] recieved. who would have thought call of soldier would be so popular this year.\n[viper] hottest thing this year.\n[jasper] gamers."]
+    # ---------------------------------------------
 
     # ---------------------------------------------
     # All arrays for loop
-    directoryPaths = [directoryPathsPlayer, directoryPathsPhotonicStudios]
-    directoryNames = [directoryNamesPlayer, directoryNamesPhotonicStudios]
+    directoryPaths = [directoryPathsPlayer, directoryPathsPhotonicStudios, directoryPathsViperBattlestation]
+    directoryNames = [directoryNamesPlayer, directoryNamesPhotonicStudios, directoryNamesViperBattlestation]
 
-    filePaths = [filePathsPlayer, filePathsPhotonicStudios]
-    fileNames = [fileNamesPlayer, fileNamesPhotonicStudios]
-    fileExtensions = [fileExtensionsPlayer, fileExtensionsPhotonicStudios]
-    fileContents = [fileContentsPlayer, fileContentsPhotonicStudios]
+    filePaths = [filePathsPlayer, filePathsPhotonicStudios, filePathsViperBattlestation]
+    fileNames = [fileNamesPlayer, fileNamesPhotonicStudios, fileNamesViperBattlestation]
+    fileExtensions = [fileExtensionsPlayer, fileExtensionsPhotonicStudios, fileExtensionsViperBattlestation]
+    fileContents = [fileContentsPlayer, fileContentsPhotonicStudios, fileContentsViperBattlestation]
     # ---------------------------------------------
 
     # emails variables
@@ -136,21 +147,21 @@ def createTables(cursor: mydb.cursor(), mydb) -> None:  # not finished{almost :)
     isMailVisible = []
 
     # servers variables
-    ips = ["70.183.159.171", "192.197.182.170"]
-    names = ["Your PC", "Photonic Studios"]
-    logins = ["user", "admin"]
-    passwords = ["password", "doggie"]
-    rpfcs = [4, 0]  # required ports to crack
-    proxies = [True, False]
-    firewalls = [True, False]
-    proxyRequirements = [25, 0]  # number of shells needed to break proxy
-    isconnected = [True, False]
-    isvisible = [True, False]
-    firewallPasswords = ["gyv67k", None]
+    ips = ["70.183.159.171", "192.197.182.170", "219.240.94.206"]
+    names = ["Your PC", "Photonic Studios", "Viper-Battlestation"]
+    logins = ["user", "admin", "admin"]
+    passwords = ["password", "doggie", "player"]
+    rpfcs = [4, 0, 0]  # required ports to crack
+    proxies = [True, False, False]
+    firewalls = [True, False, False]
+    proxyRequirements = [25, 0, 0]  # number of shells needed to break proxy
+    isconnected = [True, False, False]
+    isvisible = [True, False, False]
+    firewallPasswords = ["gyv67k", None, None]
 
     # connections variables <- takes sourceIp from server vars
-    sources = [ips[0], ips[1]]
-    connectionIps1 = [ips[1], None]
+    sources = [ips[0], ips[0]]
+    connectionIps1 = [ips[1], ips[2]]
     connectionIps2 = [None, None]
     # usedCommands <- added in runtime
 
@@ -409,7 +420,7 @@ def scp2(currentIp, currentPath, fileName, destination) -> (str, int):
         #return "Incorrect destination", 2
 
 
-def scan(currentIp) -> (str, int):  # ok
+def scan(currentIp) -> (str, int):  # modify(use for(loop))
     cursor.execute("select connectionIp1, connectionIp2 from connections where sourceIp=?", (currentIp, ))
     text = cursor.fetchall()
     text = str(text[0]).replace("('", "").replace("'", "").replace(")", "").split(", ")
@@ -629,9 +640,19 @@ def connect(currentIp, requestedIp) -> (str, str, int):
         source, connection1, connection2 = allIps[0], allIps[1], allIps[2]
         if requestedIp == connection1:
             currentIp = connection1
+
+            log = f'@1467_Connection:_from_70.183.159.171'
+            cursor.execute("insert into files values (?, ?, ?, ?, ?)", (currentIp, 'log', log, '', log))
+            mydb.commit()
+
             return currentIp, f"Connected to {requestedIp}", 2
         elif requestedIp == connection2:
             currentIp = connection2
+
+            log = f'@1467_Connection:_from_70.183.159.171'
+            cursor.execute("insert into files values (?, ?, ?, ?, ?)", (currentIp, 'log', log, '', log))
+            mydb.commit()
+
             return currentIp, f"Connected to {requestedIp}", 2
         elif requestedIp == currentIp:
             return currentIp, f"Requested IP is the same as current IP.\nFailed to connect to {requestedIp}", 3
@@ -763,6 +784,11 @@ def disconnect(currentIp) -> (str, str, str, int): # add proxy and firewall
     mydb.commit()
     curIp = str(currentIp).replace(',)', '')
     curPath = ""
+
+    log = f'@1496_70.183.159.171_Disconnected'
+    cursor.execute("insert into files values (?, ?, ?, ?, ?)", (curIp, 'log', log, '', log))
+    mydb.commit()
+
     return "70.183.159.171", curPath, f'Connected to 70.183.159.171\nDisconnected from: {curIp}', 3
 
 
@@ -1162,6 +1188,35 @@ def upload(currentIp, fileName, currentPath) -> (str, int):
             mydb.commit()
 
             return f"File {fileName} has been uploaded to {currentPath}", 2
+
+
+def append(currentIp, currentPath, filename, data):  # simple append one word
+    nameParts = str(filename).split('.')
+    if len(nameParts) == 2:
+        name, ext = nameParts
+    elif len(nameParts) == 1:
+        name, ext = nameParts, ''
+    else:
+        return "Incorrect filename", 2
+
+    cursor.execute("select * from files where ip=? and name=? and extension=? and path=?", (currentIp, name, ext, currentPath))
+    file = cursor.fetchone()
+
+    if len(file) == 0:
+        return f"File {filename} not found", 2
+    else:
+        content = str(file[4])
+        data = str(data)
+        content = content + '\n' + data
+        print(content)
+        cursor.execute("update files set content=? where ip=? and name=? and extension=? and path=?", (content, currentIp, name, ext, currentPath))
+        mydb.commit()
+
+        log = f'@1552_FileAppended:_by_70.183.159.171_-_file:{name}.{ext}'
+        cursor.execute("insert into files values (?, ?, ?, ?, ?)", (currentIp, 'log', log, '', log))
+        mydb.commit()
+
+        return f"Appended file {filename} with data: {data}", 2
 
 
 def shell(currentIp) -> (str, int):
@@ -1595,6 +1650,8 @@ while running:
                             output, number = login(currentIp, txt2, txt3)
                         elif command == f"mv {txt2} {txt3}":
                             output, number = mv(currentIp, currentPath, txt2, txt3)
+                        elif command == f"append {txt2} {txt3}":
+                            output, number = append(currentIp, currentPath, txt2, txt3)
                         else:
                             output, number = f"No command: '{command}' - Check Syntax", 2
                         print("Not added yet")
