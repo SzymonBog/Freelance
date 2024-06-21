@@ -11,7 +11,8 @@ from time import sleep  # -
 import pygame as pg
 
 # Ctrl + R  - refactor
-# add logs(added)
+# Ctrl + /  - comment
+# add check if logged
 # MySQL - changed in code(added some variables)
 """
 servers: IP varchar, name varchar, ssh #22 boolean, ftp server #21 boolean, smtp mailserver #25 boolean, http webserver #80 boolean, required port number for crack int, connected boolean
@@ -161,8 +162,7 @@ def createTables(cursor: mydb.cursor(), mydb) -> None:  # not finished{almost :)
 
     # connections variables <- takes sourceIp from server vars
     sources = [ips[0], ips[0]]
-    connectionIps1 = [ips[1], ips[2]]
-    connectionIps2 = [None, None]
+    connectionIp = [ips[1], ips[2]]
     # usedCommands <- added in runtime
 
     # mysql create tables
@@ -175,7 +175,7 @@ def createTables(cursor: mydb.cursor(), mydb) -> None:  # not finished{almost :)
     mydb.commit()
     cursor.execute("create table servers(ip varchar(15) primary key, name varchar(255), ssh bit, ftp bit, smtp bit, http bit, port22 bit, port21 bit, port25 bit, port80 bit, rpfc int, proxy bit, firewall bit, proxyRequirements int, shell bit, connected bit, visible bit, login varchar(255), password varchar(255), logged bit, firewallPassword varchar(6), hasFirewall bit, hasProxy bit)") # add firewall password
     mydb.commit()
-    cursor.execute("create table connections(sourceIp varchar(15), connectionIp1 varchar(15), connectionIp2 varchar(15))")
+    cursor.execute("create table connections(sourceIp varchar(15), connectionIp varchar(15))")
     mydb.commit()
     cursor.execute("create table usedCommands(command varchar(255), printout varchar(6000), linesCount int, currentCommandPath varchar(1000))")
     mydb.commit()
@@ -192,7 +192,7 @@ def createTables(cursor: mydb.cursor(), mydb) -> None:  # not finished{almost :)
         # \/ should be ok
         cursor.execute("insert into servers values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (ips[i], names[i], True, True, True, True, True, True, True, True, rpfcs[i], proxies[i], firewalls[i], proxyRequirements[i], False, isconnected[i], isvisible[i], logins[i], passwords[i], False, firewallPasswords[i], firewalls[i], proxies[i]))
     for i in range(len(sources)):
-        cursor.execute("insert into connections values (?, ?, ?)", (sources[i], connectionIps1[i], connectionIps2[i]))
+        cursor.execute("insert into connections values (?, ?)", (sources[i], connectionIp[i]))
     mydb.commit()
 
 
@@ -420,20 +420,29 @@ def scp2(currentIp, currentPath, fileName, destination) -> (str, int):
         #return "Incorrect destination", 2
 
 
-def scan(currentIp) -> (str, int):  # modify(use for(loop))
-    cursor.execute("select connectionIp1, connectionIp2 from connections where sourceIp=?", (currentIp, ))
+def scan(currentIp) -> (str, int):  # modified(use loop(for))
+    cursor.execute("select connectionIp from connections where sourceIp=?", (currentIp, ))
     text = cursor.fetchall()
-    text = str(text[0]).replace("('", "").replace("'", "").replace(")", "").split(", ")
+    print(text)
+    num = 0
+    txt = ""
+    #quit(1)
+    #text = str(text[0]).replace("('", "").replace("'", "").replace(")", "").split(", ")
 
-    if text[0] != "None" and text[1] != "None":
-        txt = text[0] + "\n" + text[1]
-        num = 2
-    elif text[0] != "None" and text[1] == "None":
-        txt = text[0]
-        num = 1
-    else:
-        txt = "No devices found"
-        num = 1
+    for i in range(len(text)):
+        if text[i][0] != "None":
+
+            cursor.execute("select name from servers where ip=?", (text[i][0], ))
+            serverName = cursor.fetchone()
+
+            if num != 0:
+                txt = txt + "\n" + text[i][0] + " - " + serverName[0]
+            else:
+                txt += text[i][0] + " - " + serverName[0]
+            num += 1
+        else:
+            txt = "No devices found"
+            num = 1
     return txt, num+1
 
 
@@ -631,35 +640,44 @@ def mv(currentIp, currentPath, fileName, destination) -> (str, int):
                 return f"File {fileName} has been successfuly moved to '/{cp}' folder", 2
 
 
-def connect(currentIp, requestedIp) -> (str, str, int):
+def connect(currentIp, requestedIp) -> (str, str, int):  # modified(works)
     cursor.execute("select * from connections where sourceIp=?", (currentIp, ))
     allIps = cursor.fetchall()
-    allIps = str(allIps).replace("(", "").replace(")", "").replace("[", "").replace("]", "").replace("'", "").split(", ")
+    print(allIps[1][1])
 
-    try:
-        source, connection1, connection2 = allIps[0], allIps[1], allIps[2]
-        if requestedIp == connection1:
-            currentIp = connection1
+    #allIps = str(allIps).replace("(", "").replace(")", "").replace("[", "").replace("]", "").replace("'", "").split(", ")
+    #print(allIps)
+    #quit(418)
 
-            log = f'@1467_Connection:_from_70.183.159.171'
-            cursor.execute("insert into files values (?, ?, ?, ?, ?)", (currentIp, 'log', log, '', log))
-            mydb.commit()
+    for i in range(len(allIps)):
+        try:
+            source, connection1 = allIps[i][0], allIps[i][1]
+            if requestedIp == connection1:
+                currentIp = connection1
 
-            return currentIp, f"Connected to {requestedIp}", 2
-        elif requestedIp == connection2:
-            currentIp = connection2
+                log = f'@1467_Connection:_from_70.183.159.171'
+                cursor.execute("insert into files values (?, ?, ?, ?, ?)", (currentIp, 'log', log, '', log))
+                mydb.commit()
 
-            log = f'@1467_Connection:_from_70.183.159.171'
-            cursor.execute("insert into files values (?, ?, ?, ?, ?)", (currentIp, 'log', log, '', log))
-            mydb.commit()
+                return currentIp, f"Connected to {requestedIp}", 2
+                """
+                elif requestedIp == connection2:
+                    currentIp = connection2
+    
+                    log = f'@1467_Connection:_from_70.183.159.171'
+                    cursor.execute("insert into files values (?, ?, ?, ?, ?)", (currentIp, 'log', log, '', log))
+                    mydb.commit()
+    
+                    return currentIp, f"Connected to {requestedIp}", 2
+                """
+            elif requestedIp == currentIp:
+                return currentIp, f"Requested IP is the same as current IP.\nFailed to connect to {requestedIp}", 3
+            #else:
+            #    return currentIp, f"Failed to connect to {requestedIp}.\nNo connection found.", 3
+        except IndexError:
+            pass
 
-            return currentIp, f"Connected to {requestedIp}", 2
-        elif requestedIp == currentIp:
-            return currentIp, f"Requested IP is the same as current IP.\nFailed to connect to {requestedIp}", 3
-        else:
-            return currentIp, f"Failed to connect to {requestedIp}.\nNo connection found.", 3
-    except IndexError:
-        pass
+    return currentIp, f"Failed to connect to {requestedIp}.\nNo connection found.", 3
 
     """
     try:
