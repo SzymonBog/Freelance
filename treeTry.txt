@@ -1,0 +1,37 @@
+# https://stackoverflow.com/questions/9727673/list-directory-tree-structure-in-python
+
+#├── package
+#│   ├── __init__.py
+#│   ├── __main__.py
+#│   ├── subpackage
+#│   │   ├── __init__.py
+#│   │   ├── __main__.py
+#│   │   └── module.py
+#│   └── subpackage2
+#│       ├── __init__.py
+#│       ├── __main__.py
+#│       └── module2.py
+#└── package2
+#    └── __init__.py
+
+def tree(currentIp, currentPath):
+    # prefix components
+    space =  '    '
+    branch = '|   '
+    # pointers
+    tee =    '├── '
+    last =   '└── '
+
+    # directories: ip, path, name
+    # files: ip, name, path, extention, content
+
+    cursor.execute("select * from files where ip=?", (currentIp, ))
+    files = cursor.fetchall()
+
+    cursor.execute("select * from directories where ip=?", (currentIp, ))
+    dir = cursor.fetchall()
+
+    txt = str(currentPath)
+    for d in dir:  # check if in current directory are any folders/files, if yes add them to the tree; if folders are not empty to the same thing(do the same thing you did in 'ls' command)
+        
+    
