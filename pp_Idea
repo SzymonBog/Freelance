@@ -1,3 +1,83 @@
 pig speed reduction on hit(10% if obstacle, 5% if bird)
 
-void OnCollisionEnter()
+Using Trigger Colliders
+Using trigger colliders is often the preferred method for 2D games, especially for hit-based interactions. Here's why:
+
+Simplicity: Triggers are easier to manage and less prone to false positives compared to regular colliders.
+Performance: They don't require continuous collision detection, which can be beneficial for performance.
+Flexibility: You can easily detect overlaps without affecting the physics simulation.
+Here's how you can implement this:
+
+using UnityEngine;
+
+public class DamageDealer : MonoBehaviour
+{
+    public float damageAmount = 10f;
+    public LayerMask enemyLayers;
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        // Check if the collided object is an enemy
+        if (enemyLayers.Contains(collision.gameObject.layer))
+        {
+            // Apply damage to the enemy
+            ApplyDamage(collision);
+        }
+    }
+
+    void ApplyDamage(Collider2D collision)
+    {
+        // Get the health component from the enemy
+        Health health = collision.gameObject.GetComponent<Health>();
+        
+        if (health != null)
+        {
+            // Calculate damage reduction
+            float reducedDamage = CalculateDamageReduction(health.currentHealth);
+
+            // Apply damage
+            health.TakeDamage(reducedDamage);
+            
+            // Play a sound effect or show visual feedback
+            Debug.Log("Dealt " + reducedDamage + " damage to " + health.gameObject.name);
+        }
+    }
+
+    float CalculateDamageReduction(float currentHealth)
+    {
+        // Implement damage reduction logic here
+        return currentHealth / 100f;
+    }
+}
+
+_________________________________________________________
+
+Using Regular Colliders
+If you prefer using regular colliders instead of triggers, you can achieve similar results:
+
+Create two colliders:
+One larger collider (trigger) for detecting hits
+One smaller collider (non-trigger) for determining the exact hit point
+In your DamageDealer script, you would need to check both colliders:
+
+void OnCollisionEnter2D(Collision2D collision)
+{
+    // Check if the collided object is an enemy
+    Collider2D enemyCollider = collision.collider;
+    if (enemyLayers.Contains(enemyCollider.gameObject.layer))
+    {
+        // Apply damage to the enemy
+        ApplyDamage(collision);
+    }
+}
+
+void OnCollisionStay2D(Collision2D collision)
+{
+    // Check if the collided object is an enemy
+    Collider2D enemyCollider = collision.collider;
+    if (enemyLayers.Contains(enemyCollider.gameObject.layer))
+    {
+        // Apply damage to the enemy
+        ApplyDamage(collision);
+    }
+}
