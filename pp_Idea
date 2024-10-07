@@ -1,1 +1,3 @@
-pig speed reduction by 10% on hit
+pig speed reduction on hit(10% if obstacle, 5% if bird)
+
+void OnCollisionEnter()
