@@ -1,5 +1,7 @@
 pig speed reduction on hit(10% if obstacle, 5% if bird)
 
+Most of this is completed
+
 Using Trigger Colliders
 Using trigger colliders is often the preferred method for 2D games, especially for hit-based interactions. Here's why:
 
