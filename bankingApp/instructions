@@ -1,0 +1,24 @@
+1) Setup
+- pip install django
+- django-admin startproject {project name}     # to start new django project
+- cd {project name}     # to change directory to one with manage.py
+- python manage.py startapp {app name}      # to create new app
+
+
+Important
+- Ctrl + C - to stop server
+
+
+Files to modify:
+- (website) settings.py
+(bbnb)
+- (app) models.py
+- (app) views.py
+- (app) urls.py
+- (app) admin.py
+(stocks)
+- (app) models.py
+- (app) views.py
+- (app) urls.py
+- (app) utils.py
+- (app) admin.py
