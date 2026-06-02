@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Blue Bulls National Bank</title>
+
+        <style>
+            .start_date_cell {
+                width: 125px;
+                text-align: center;
+            }
+
+            .end_date_cell {
+                width: 125px;
+                text-align: center;
+            }
+
+            .duration_cell {
+                width: 75px;
+                text-align: center;
+            }
+
+            .money_cell {
+                width: 150px;
+                text-align: center;
+            }
+
+            .percent_cell {
+                width: 75px;
+                text-align: center;
+            }
+
+            .break_a_deposit_cell {
+                width: 125px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <script>
+            window.addEventListener('pageshow', function (event) {
+                if (event.persisted) {
+                    console.log("Page was loaded from bfcache (back-forward cache)");
+                    window.location.href = "http://127.0.0.1:8000/bbnb/"
+                } else {
+                    console.log("Page loaded normally.");
+                }
+            });
+        </script>
+
+
+        <table width="100%">
+            <td width="10%">
+
+            </td>
+            <td width="80%">
+                <table width="100%">
+                    <td style="text-align: left; width:40%">
+                            Blue Bulls National Bank |||| Online Banking
+                        </td>
+
+                        <td style="text-align: right; width:60%">
+                            <div>
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="operation" value="logout">
+                                    <button type="submit">Log out</button>
+                                </form>
+                            </div>
+                        </td>
+                </table>
+                <table>
+                    <tr>
+                        <!--buttons section-->
+                         <div>
+                             <table>
+                                 <tr>
+                                     <td>
+                                         <form method="post">
+                                             {% csrf_token %}
+                                             <input type="hidden" name="operation" value="accounts">
+                                             <button type="submit">Accounts</button>
+                                         </form>
+                                     </td>
+                                     <td>
+                                         <form method="post">
+                                             {% csrf_token %}
+                                             <input type="hidden" name="operation" value="transfers">
+                                             <button type="submit">Transfers</button>
+                                         </form>
+                                     </td>
+                                     <td>
+                                         <form method="post">
+                                             {% csrf_token %}
+                                             <input type="hidden" name="operation" value="investments">
+                                             <button type="submit">Investing</button>
+                                         </form>
+                                     </td>
+                                 </tr>
+                             </table>
+
+                         </div>
+                    </tr>
+                </table>
+            </td>
+            <td width="10%">
+
+            </td>
+        </table>
+
+        <table width="100%">
+            <td width="10%">
+
+            </td>
+            <td width="80%">
+                <h1>Blue Bulls National Bank > Investments</h1>
+
+                <form method="post">
+                    {% csrf_token %}
+                    $ <input type="number" name="money" placeholder="amount" required>
+                    <br>
+                    <br>
+                    Deposit for: 1 month
+                    <br>
+                    Annual interest rate: 4.5%
+                    <br>
+                    <br>
+                    <table>
+                        <tr>
+                            <td>
+                                <button type="submit" name="button" value="send">Make a deposit</button>
+                            </td>
+                            <td>
+                                <button type="submit" name="button" value="cancel">Cancel</button>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+
+            </td>
+
+            <td width="10%">
+
+            </td>
+        </table>
+    </body>
+</html>

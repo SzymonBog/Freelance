@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Blue Bulls National Bank</title>
+    </head>
+    <body>
+        <h1>Hello</h1>
+        <h2>Welcome to my website2</h2>
+        <button type="button">
+            <a href="/bbnb/">
+                Click Me!
+            </a>
+        </button>
+
+        <!-- Multiply section -->
+        <h2>Multiply Two Numbers</h2>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="operation" value="multiply">
+            <input type="number" name="num1" placeholder="Enter first number" required>
+            <input type="number" name="num2" placeholder="Enter second number" required>
+            <button type="submit">Multiply</button>
+        </form>
+
+        {% if multiply_result is not None %}
+            <h3>Result: {{multiply_result}}</h3>
+        {% endif %}
+
+        <!-- Add section -->
+        <h2>Add Two Numbers</h2>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="operation" value="add">
+            <input type="number" name="num1" placeholder="Enter first number" required>
+            <input type="number" name="num2" placeholder="Enter second number" required>
+            <button type="submit">Add</button>
+        </form>
+
+        {% if add_result is not None %}
+            <h3>Result: {{add_result}}</h3>
+        {% endif %}
+
+        <!-- Divide section -->
+        <h2>Divide Two Numbers</h2>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="operation" value="divide">
+            <input type="number" name="num1" placeholder="Enter first number" required>
+            <input type="number" name="num2" placeholder="Enter second number" required>
+            <button type="submit">Divide</button>
+        </form>
+
+        {% if divide_result is not None %}
+            <h3>Result: {{divide_result}}</h3>
+        {% endif %}
+    </body>
+</html>

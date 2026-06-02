@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Blue Bulls National Bank</title>
+        <script>
+            window.addEventListener('pageshow', function (event) {
+                if (event.persisted) {
+                    console.log("Page was loaded from bfcache (back-forward cache)");
+                    window.location.href = "http://127.0.0.1:8000/bbnb/"
+                } else {
+                    console.log("Page loaded normally.");
+                }
+            });
+        </script>
+        <style>
+            .side_bars {background-color: #5A5A5A;}
+            .website {background-color: #3B3B3B;}
+            .loginBox {background-color: red; width: 260px; border: 15px solid red}
+            .inputField {width: 240px; height: 30px}
+            .redButton {background-color: red, color: red; border: white; text-align: center; width: 220px; height: 40px;}
+
+            html, body { height: 100%; width:100%}
+            table { margin-top: 0; border-collapse: collapse }
+            body { margin: 0; padding: 0; }
+        </style>
+
+    </head>
+    <body class="side_bars">
+        <table style="height:100%; width:100%;">
+            <tr>
+                <td width="10%">
+
+                </td>
+                <td class="website" width="80%">
+                    <div>
+                        <h1>Blue Bulls National Bank</h1>
+                    </div>
+
+                    <table>
+
+                        <tr>
+
+                            <th>
+                                <!--Sign In is finished-->
+                                <div class="loginBox">
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="operation" value="sign in">
+                                        <input type="text" class="inputField" name="id" placeholder="User ID" required>
+                                        <br>
+                                        <input type="password" class="inputField" name="password" placeholder="Password" style="width: 240px;" required>
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <button type="submit" class="redButton">Sign In</button>
+                                    </form>
+                                </div>
+                            </th>
+
+                            <th width="380px">
+
+                            </th>
+
+                            <th>
+                                <!--Sign Up is finished-->
+                                <div class="loginBox">
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="operation" value="sign up">
+                                        <input type="text" class="inputField" name="name" placeholder="Enter your name" style="width: 240px;" required>
+                                        <br>
+                                        <input type="text"  class="inputField"name="surname" placeholder="Enter your surname" style="width: 240px;" required>
+                                        <br>
+                                        <input type="email"  class="inputField"name="email" placeholder="Enter your email" style="width: 240px;" required>
+                                        <br>
+                                        <input type="text"  class="inputField"name="userId" placeholder="Enter login/ID" style="width: 240px;" required>
+                                        <br>
+                                        <input type="text" class="inputField" name="accountPassword" placeholder="Enter password" style="width: 240px;" required>
+                                        <br>
+                                        <input type="number" class="inputField" name="balance" placeholder="Enter balance" style="width: 240px;" required>
+                                        <br>
+                                        <button type="submit" class="redButton">Sign Up</button>
+                                    </form>
+                                </div>
+                            </th>
+                        </tr>
+
+                        <tr>
+                            <th>
+                                <div>
+                                    {% if signin_result is not None %}
+                                        <h3>{{signin_result}}</h3>
+                                    {% endif %}
+                                </div>
+                            </th>
+
+                            <th width="380px">
+
+                            </th>
+
+                            <th>
+                                <div>
+                                    {% if signup_result is not None %}
+                                        <h3>{{signup_result|linebreaks}}</h3>
+                                    {% endif %}
+                                </div>
+                            </th>
+                        </tr>
+
+                    </table>
+
+                    <div style="height: calc(100vh - 200px); display: flex;">
+                        
+                    </div>
+                </td>
+                <td width="10%">
+
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

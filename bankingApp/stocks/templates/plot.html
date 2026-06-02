@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Plot in html</title>
+</head>
+<body>
+    {% if plot %}
+        <img src="data:image/png;base64,{{ plot }}" alt="Plot" />
+    {% endif %}
+</body>
+</html>

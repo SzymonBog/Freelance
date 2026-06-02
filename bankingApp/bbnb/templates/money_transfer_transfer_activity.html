@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Blue Bulls National Bank</title>
+
+        <style>
+            .tran_button {
+                width: 350px;
+                height: 35px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .name_surname_cell {
+                width: 230px;
+            }
+
+            .account_number_cell {
+                width: 300px;
+            }
+
+            .amount_cell {
+                width: 100px;
+            }
+
+            .description_cell {
+                width: 275px;
+            }
+
+            .green_text {
+                color: green;
+            }
+
+            .red_text {
+                color: red;
+            }
+        </style>
+    </head>
+    <body>
+        <script>
+            window.addEventListener('pageshow', function (event) {
+                if (event.persisted) {
+                    console.log("Page was loaded from bfcache (back-forward cache)");
+                    window.location.href = "http://127.0.0.1:8000/bbnb/"
+                } else {
+                    console.log("Page loaded normally.");
+                }
+            });
+        </script>
+
+
+        <table width="100%">
+            <td width="10%">
+
+            </td>
+            <td width="80%">
+                <table width="100%">
+                    <td style="text-align: left; width:40%">
+                            Blue Bulls National Bank |||| Online Banking
+                        </td>
+
+                        <td style="text-align: right; width:60%">
+                            <div>
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="operation" value="logout">
+                                    <button type="submit">Log out</button>
+                                </form>
+                            </div>
+                        </td>
+                </table>
+                <table>
+                    <tr>
+                        <!--buttons section-->
+                         <div>
+                             <table>
+                                 <tr>
+                                     <td>
+                                         <form method="post">
+                                             {% csrf_token %}
+                                             <input type="hidden" name="operation" value="accounts">
+                                             <button type="submit">Accounts</button>
+                                         </form>
+                                     </td>
+                                     <td>
+                                         <form method="post">
+                                             {% csrf_token %}
+                                             <input type="hidden" name="operation" value="transfers">
+                                             <button type="submit">Transfers</button>
+                                         </form>
+                                     </td>
+                                     <td>
+                                         <form method="post">
+                                             {% csrf_token %}
+                                             <input type="hidden" name="operation" value="investments">
+                                             <button type="submit">Investing</button>
+                                         </form>
+                                     </td>
+                                 </tr>
+                             </table>
+
+                         </div>
+                    </tr>
+                </table>
+            </td>
+            <td width="10%">
+
+            </td>
+        </table>
+
+        <table width="100%">
+            <td width="10%">
+
+            </td>
+            <td width="80%">
+                <h1>Blue Bulls National Bank > Transfers</h1>
+
+                <br>
+                <table width="80%">
+                    <tr>
+                        <td width="25%">
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="page" value="transfer_activity">
+                                <button type="submit" class="tran_button">Transfer Activity</button>
+                            </form>
+                        </td>
+                        <td width="25%">
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="page" value="make_transfer">
+                                <button type="submit" class="tran_button">Make Transfer</button>
+                            </form>
+                        </td>
+                        <td width="25%">
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="page" value="add_accounts_recipients">
+                                <button type="submit" class="tran_button">Add Account/Recipient</button>
+                            </form>
+                        </td>
+                        <!--
+                        <td width="25%">
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="page" value="manage_accounts_recipients">
+                                <button type="submit" class="tran_button">Manage Accounts/Recipients</button>
+                            </form>
+                        </td>
+                        -->
+                    </tr>
+                </table>
+                <table width="80%">
+                    <tr>
+                        <td width="100%">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <h2>Personal Checking - 7351</h2>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h2>$ {{ balance }}</h2>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Available balance (as of today)
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <h2>Transactions</h2>
+                                <table border="1">
+                                    <thead>
+                                        <tr>
+                                            <th class="name_surname_cell">Name</th>
+                                            <th class="account_number_cell">Account Number</th>
+                                            <th class="amount_cell">Amount</th>
+                                            <th class="description_cell">Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for recipient_name, recipient_surname, from_account, to_account, received, transferred_amount, description, sender_name, sender_surname in transfers %}
+                                        {% if received %}
+                                        <tr>
+                                            <td>{{ sender_name }} {{ sender_surname }}</td>
+                                            <td>{{ from_account }}</td>
+                                            <td class="green_text">+ ${{ transferred_amount|floatformat:2 }}</td>
+                                            <td>{{ description }}</td>
+                                        </tr>
+                                        {% else %}
+                                        <tr>
+                                            <td>{{ recipient_name }} {{ recipient_surname }}</td>
+                                            <td>{{ to_account }}</td>
+                                            <td class="red_text">- ${{ transferred_amount|floatformat:2 }}</td>
+                                            <td>{{ description }}</td>
+                                        </tr>
+                                        {% endif %}
+                                    {% empty %}
+                                        <tr>
+                                            <td colspan="5">No transfers</td>
+                                        </tr>
+                                    {% endfor %}
+
+                                    </tbody>
+                                </table>
+
+                        </td>
+                    </tr>
+                </table>
+            </td>
+
+            <td width="10%">
+
+            </td>
+        </table>
+    </body>
+</html>

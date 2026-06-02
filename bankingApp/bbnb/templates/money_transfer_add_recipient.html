@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Blue Bulls National Bank</title>
+
+        <style>
+            .tran_button {
+                width: 350px;
+                height: 35px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        </style>
+    </head>
+    <body>
+        <script>
+            window.addEventListener('pageshow', function (event) {
+                if (event.persisted) {
+                    console.log("Page was loaded from bfcache (back-forward cache)");
+                    window.location.href = "http://127.0.0.1:8000/bbnb/"
+                } else {
+                    console.log("Page loaded normally.");
+                }
+            });
+        </script>
+
+
+        <table width="100%">
+            <td width="10%">
+
+            </td>
+            <td width="80%">
+                <table width="100%">
+                    <td style="text-align: left; width:40%">
+                            Blue Bulls National Bank |||| Online Banking
+                        </td>
+
+                        <td style="text-align: right; width:60%">
+                            <div>
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="operation" value="logout">
+                                    <button type="submit">Log out</button>
+                                </form>
+                            </div>
+                        </td>
+                </table>
+                <table>
+                    <tr>
+                        <!--buttons section-->
+                         <div>
+                             <table>
+                                 <tr>
+                                     <td>
+                                         <form method="post">
+                                             {% csrf_token %}
+                                             <input type="hidden" name="operation" value="accounts">
+                                             <button type="submit">Accounts</button>
+                                         </form>
+                                     </td>
+                                     <td>
+                                         <form method="post">
+                                             {% csrf_token %}
+                                             <input type="hidden" name="operation" value="transfers">
+                                             <button type="submit">Transfers</button>
+                                         </form>
+                                     </td>
+                                     <td>
+                                         <form method="post">
+                                             {% csrf_token %}
+                                             <input type="hidden" name="operation" value="investments">
+                                             <button type="submit">Investing</button>
+                                         </form>
+                                     </td>
+                                 </tr>
+                             </table>
+
+                         </div>
+                    </tr>
+                </table>
+            </td>
+            <td width="10%">
+
+            </td>
+        </table>
+
+        <table width="100%">
+            <td width="10%">
+
+            </td>
+            <td width="80%">
+                <h1>Blue Bulls National Bank > Transfers</h1>
+
+                <br>
+                <table width="80%">
+                    <tr>
+                        <td width="25%">
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="page" value="transfer_activity">
+                                <button type="submit" class="tran_button">Transfer Activity</button>
+                            </form>
+                        </td>
+                        <td width="25%">
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="page" value="make_transfer">
+                                <button type="submit" class="tran_button">Make Transfer</button>
+                            </form>
+                        </td>
+                        <td width="25%">
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="page" value="add_accounts_recipients">
+                                <button type="submit" class="tran_button">Add Account/Recipient</button>
+                            </form>
+                        </td>
+                        <!--
+                        <td width="25%">
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="page" value="manage_accounts_recipients">
+                                <button type="submit" class="tran_button">Manage Accounts/Recipients</button>
+                            </form>
+                        </td>
+                        -->
+                    </tr>
+                </table>
+                <table width="80%">
+                    <tr>
+                        <td width="100%">
+                            <h2>Add Account/Recipient</h2>
+                            * required
+                            <br>
+                            <br>
+
+                            Account Number *
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="text" name="account_number" style="width:300px" required>
+
+                                <!--  name and surname will be taken from db
+                                <table>
+                                    <tr>
+                                        <td>Name *</td>
+                                        <td>Surname *</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <form method="post">
+                                                {% csrf_token %}
+                                                <input type="text" name="name" required>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form method="post">
+                                                {% csrf_token %}
+                                                <input type="text" name="surname" required>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </table>
+                                -->
+                                <br>
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <button type="submit" name="add" value="approved" style="width:125px; height:25px">Add Recipient</button>
+                                        </td>
+                                        <td>
+                                            <button type="submit" name="add" value="canceled" style="width:125px; height:25px">Cancel</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </form>
+
+                        </td>
+                    </tr>
+                </table>
+
+                {% if result is not None %}
+                    <h3>{{ result }}</h3>
+                {% endif %}
+
+            </td>
+
+            <td width="10%">
+
+            </td>
+        </table>
+    </body>
+</html>

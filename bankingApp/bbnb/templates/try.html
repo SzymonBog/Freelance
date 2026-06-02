@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%;">
+<head>
+    <meta charset="UTF-8">
+    <title>Full Height Layout</title>
+    <style>
+        /* Make body fill the entire viewport */
+        body {
+            margin: 0;
+            height: 100%;
+            background: linear-gradient(to bottom, #f0f0f0 0%, #ffffff 100%);
+        }
+
+        /* Style the table */
+        table {
+            width: 50%;
+            margin: 20px auto;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+        </tr>
+        <tr>
+            <td>John</td>
+            <td>25</td>
+        </tr>
+        <tr>
+            <td>Jane</td>
+            <td>30</td>
+        </tr>
+    </table>
+
+    <!-- Additional content to demonstrate full height -->
+    <div style="height: calc(100vh - 200px); display: flex; align-items: center; justify-content: center;">
+        <p>Content fills remaining space</p>
+    </div>
+</body>
+</html>

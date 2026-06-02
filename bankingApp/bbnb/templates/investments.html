@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Blue Bulls National Bank</title>
+
+        <style>
+            .start_date_cell {
+                width: 125px;
+                text-align: center;
+            }
+
+            .end_date_cell {
+                width: 125px;
+                text-align: center;
+            }
+
+            .duration_cell {
+                width: 75px;
+                text-align: center;
+            }
+
+            .money_cell {
+                width: 150px;
+                text-align: center;
+            }
+
+            .percent_cell {
+                width: 75px;
+                text-align: center;
+            }
+
+            .break_a_deposit_cell {
+                width: 125px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <script>
+            window.addEventListener('pageshow', function (event) {
+                if (event.persisted) {
+                    console.log("Page was loaded from bfcache (back-forward cache)");
+                    window.location.href = "http://127.0.0.1:8000/bbnb/"
+                } else {
+                    console.log("Page loaded normally.");
+                }
+            });
+        </script>
+
+
+        <table width="100%">
+            <td width="10%">
+
+            </td>
+            <td width="80%">
+                <table width="100%">
+                    <td style="text-align: left; width:40%">
+                            Blue Bulls National Bank |||| Online Banking
+                        </td>
+
+                        <td style="text-align: right; width:60%">
+                            <div>
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="operation" value="logout">
+                                    <button type="submit">Log out</button>
+                                </form>
+                            </div>
+                        </td>
+                </table>
+                <table>
+                    <tr>
+                        <!--buttons section-->
+                         <div>
+                             <table>
+                                 <tr>
+                                     <td>
+                                         <form method="post">
+                                             {% csrf_token %}
+                                             <input type="hidden" name="operation" value="accounts">
+                                             <button type="submit">Accounts</button>
+                                         </form>
+                                     </td>
+                                     <td>
+                                         <form method="post">
+                                             {% csrf_token %}
+                                             <input type="hidden" name="operation" value="transfers">
+                                             <button type="submit">Transfers</button>
+                                         </form>
+                                     </td>
+                                     <td>
+                                         <form method="post">
+                                             {% csrf_token %}
+                                             <input type="hidden" name="operation" value="investments">
+                                             <button type="submit">Investing</button>
+                                         </form>
+                                     </td>
+                                 </tr>
+                             </table>
+
+                         </div>
+                    </tr>
+                </table>
+            </td>
+            <td width="10%">
+
+            </td>
+        </table>
+
+        <table width="100%">
+            <td width="10%">
+
+            </td>
+            <td width="80%">
+                <h1>Blue Bulls National Bank > Investments</h1>
+
+                <h2>Simple Savings - 8183</h2>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th class="start_date_cell">Start Date</th>
+                            <th class="end_date_cell">End Date</th>
+                            <th class="duration_cell">Duration</th>
+                            <th class="money_cell">Money</th>
+                            <th class="percent_cell">Percent</th>
+                            <th class="break_a_deposit_cell">Break A Deposit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for start, end, duration, amount, percent in deposits %}
+                        <tr>
+                            <form method="post">
+                                {% csrf_token %}
+                                <td class="start_date_cell">
+                                    {{ start }}
+                                </td>
+                                <td class="end_date_cell">
+                                    {{ end }}
+                                </td>
+                                <td class="duration_cell">
+                                    {{ duration }}
+                                    {% if duration is not 1 %}
+                                        months
+                                    {% else %}
+                                        month
+                                    {% endif %}
+                                </td>
+                                <td class="money_cell">
+                                    $ {{ amount }}
+                                </td>
+                                <td class="percent_cell">
+                                    {{ percent }} %
+                                </td>
+
+                                <input type="hidden" name="start" value="{{ start }}">
+                                <input type="hidden" name="end" value="{{ end }}">
+                                <input type="hidden" name="duration" value="{{ duration }}">
+                                <input type="hidden" name="amount" value="{{ amount }}">
+                                <input type="hidden" name="percent" value="{{ percent }}">
+
+                                <td class="break_a_deposit_cell">
+                                    <button type="submit" name="break" value="break" style="width: 125px">break</button>
+                                </td>
+                            </form>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="6">
+                                You don't have any deposits
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <br>
+                <table border="1" style="border-spacing: 10px; border-collapse: separate;">
+                    {% for percent, months, link in deposit_offers %}
+                        <tr>
+                            <td width="300px">
+                                Start new deposit
+                                <br>
+                                <br>
+                                Duration: {{ months }}
+                                {% if months == 1 %}
+                                    month
+                                {% else %}
+                                    months
+                                {% endif %}
+                                <br>
+                                Annual Interest Rate: {{ percent }}%
+                            </td>
+                            <td>
+                                <br>
+                                <a href="{{ link }}">
+                                    <button>Check Offer</button>
+                                </a>
+                            </td>
+
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="2">
+                                No deposits available
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+
+            </td>
+
+            <td width="10%">
+
+            </td>
+        </table>
+    </body>
+</html>
