@@ -1,5 +1,25 @@
-# Freelance
-Freelance projects:
-- Hangman - prosta gra w wisielca dla jednego lub dwóch graczy napisana w C++
-- PythonHacknetRecreation - projekt polegał na odtworzeniu gry "Hacknet" przy użyciu języka python i możliwością zapisu danych do i odczytu z bazy danych
-- bankingApp - prosta aplikacja bankowa napisana w django w której można rejestrować/tworzyć nowe konto i logować się na nie. Po zalogowaniu użytkownik może: zobaczyć swój stan konta, ostatnie przelewy/transakcje; dokonać przelewu, dodać odbiorcę, zakładać lokaty i się wylogować
+# Projekty
+Repozytorium zawiera wybrane projekty oprogramowania opracowane w celach edukacyjnych i praktycznych.
+
+# BankingApp (Django + MySQL)
+
+Aplikacja internetowa symulująca podstawowy system bankowy. Funkcje obejmują:
+
+rejestrację i uwierzytelnianie użytkowników
+podgląd salda konta
+historię transakcji
+przelewy pieniężne
+zarządzanie odbiorcami
+zarządzanie wpłatami
+
+# PythonHacknetRecreation
+
+Odtworzenie gry Hacknet w Pythonie z integracją bazy danych do zapisywania i wczytywania stanu gry.
+
+# Hangman (C++)
+
+Prosta gra w wisielca dla jednego lub wielu graczy, zaimplementowana w C++.
+
+# Użyte technologie
+
+Python, Django, C++, MySQL
